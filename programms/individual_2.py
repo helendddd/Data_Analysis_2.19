@@ -29,7 +29,7 @@ def display_tree(directory, args, prefix="", current_depth=0):
 
         # Вывести дерево директорий
         if item.is_dir():
-            if not args.f:  
+            if not args.f:
                 print(prefix + connector + item.name + "/")
             display_tree(item, args, new_prefix, current_depth + 1)
         # Вывести дерево только с файлами
@@ -49,46 +49,30 @@ def main(command_line=None):
     # Создать основной парсер командной строки.
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--version",
-        action="version",
-        version="%(prog)s 0.0.1"
+        "--version", action="version", version="%(prog)s 0.0.1"
     )
-    parser.add_argument(
-        "directory",
-        type=str,
-        help="The directory to list."
-    )
+    parser.add_argument("directory", type=str, help="The directory to list.")
     # Выводятся даже скрытые файлы.
     parser.add_argument(
-        "-a",
-        action="store_true",
-        help="All files are listed."
+        "-a", action="store_true", help="All files are listed."
     )
     # -f и -d взаимосключащие, так что их нужно запретить вводить одновременно.
     choose = parser.add_mutually_exclusive_group()
     # Отображать каталоги.
     choose.add_argument(
-        "-d",
-        action="store_true",
-        help="List directories only."
+        "-d", action="store_true", help="List directories only."
     )
     # Отображать файлы.
-    choose.add_argument(
-        "-f",
-        action="store_true",
-        help="List files only."
-    )
+    choose.add_argument("-f", action="store_true", help="List files only.")
     # Максимальная глубина отображения дерева
     parser.add_argument(
-        "-s",
-        type=int,
-        help="Max display depth of the directory tree."
+        "-s", type=int, help="Max display depth of the directory tree."
     )
     # Не просто имя файла, а полное имя.
     parser.add_argument(
         "-t",
         action="store_true",
-        help="Print the full path prefix for each file."
+        help="Print the full path prefix for each file.",
     )
     # Выполнить разбор аргументов командной строки.
     args = parser.parse_args(command_line)
@@ -96,5 +80,5 @@ def main(command_line=None):
     display_tree(directory, args)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

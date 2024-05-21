@@ -15,9 +15,10 @@
 
 import argparse
 import json
-import jsonschema
 import os.path
 import pathlib
+
+import jsonschema
 
 
 def add_student(students, name, group_number, performance):
@@ -31,9 +32,9 @@ def add_student(students, name, group_number, performance):
 
     students.append(
         {
-            'name': name,
-            'group_number': group_number,
-            'performance': performance
+            "name": name,
+            "group_number": group_number,
+            "performance": performance,
         }
     )
     return students
@@ -47,20 +48,14 @@ def list_students(students):
     номер группы и успеваемость.
     """
     if students:
-        line = '+-{}-+-{}-+-{}-+-{}-+'.format(
-            '-' * 4,
-            '-' * 30,
-            '-' * 20,
-            '-' * 20
+        line = "+-{}-+-{}-+-{}-+-{}-+".format(
+            "-" * 4, "-" * 30, "-" * 20, "-" * 20
         )
         print(line)
 
         print(
-            '| {:^4} | {:^30} | {:^20} | {:^20} |'.format(
-                "No",
-                "Фамилия и инициалы",
-                "Номер группы",
-                "Успеваемость"
+            "| {:^4} | {:^30} | {:^20} | {:^20} |".format(
+                "No", "Фамилия и инициалы", "Номер группы", "Успеваемость"
             )
         )
 
@@ -68,11 +63,11 @@ def list_students(students):
 
         for idx, student in enumerate(students, 1):
             print(
-                '| {:>4} | {:<30} | {:<20} | {:>20} |'.format(
+                "| {:>4} | {:<30} | {:<20} | {:>20} |".format(
                     idx,
-                    student.get('name', ''),
-                    student.get('group_number', ''),
-                    ', '.join(map(str, student.get('performance', [])))
+                    student.get("name", ""),
+                    student.get("group_number", ""),
+                    ", ".join(map(str, student.get("performance", []))),
                 )
             )
         print(line)
@@ -87,7 +82,7 @@ def find(students):
     found = []
 
     for student in students:
-        if 2 in student['performance']:
+        if 2 in student["performance"]:
             found.append(student)
 
     if not found:
@@ -122,11 +117,11 @@ def load_students(file_name):
                     "type": "array",
                     "items": {"type": "integer"},
                     "minItems": 5,
-                    "maxItems": 5
-                }
+                    "maxItems": 5,
+                },
             },
-            "required": ["name", "group_number", "performance"]
-        }
+            "required": ["name", "group_number", "performance"],
+        },
     }
     # Открыть файл с заданным именем для чтения.
     with open(file_name, "r", encoding="utf-8") as fin:
@@ -146,9 +141,7 @@ def main(command_line=None):
     # Создать родительский парсер для определения имени файла.
     file_parser = argparse.ArgumentParser(add_help=False)
     file_parser.add_argument(
-        "filename",
-        action="store",
-        help="The name of data file."
+        "filename", action="store", help="The name of data file."
     )
     file_parser.add_argument(
         "--home",
@@ -158,29 +151,18 @@ def main(command_line=None):
     # Создать основной парсер командной строки.
     parser = argparse.ArgumentParser("students")
     parser.add_argument(
-        "--version",
-        action="version",
-        version="%(prog)s 0.1.0"
+        "--version", action="version", version="%(prog)s 0.1.0"
     )
     subparsers = parser.add_subparsers(dest="command")
     # Создать субпарсер для добавления студента.
     add = subparsers.add_parser(
-        "add",
-        parents=[file_parser],
-        help="Add a new student"
+        "add", parents=[file_parser], help="Add a new student"
     )
     add.add_argument(
-        "-n",
-        "--name",
-        action="store",
-        required=True,
-        help="Student's name"
+        "-n", "--name", action="store", required=True, help="Student's name"
     )
     add.add_argument(
-        "-g",
-        "--group",
-        action="store",
-        help="Student's group number"
+        "-g", "--group", action="store", help="Student's group number"
     )
     add.add_argument(
         "-p",
@@ -188,20 +170,16 @@ def main(command_line=None):
         nargs=5,
         type=int,
         required=True,
-        help="Student's performance (list of five marks)"
+        help="Student's performance (list of five marks)",
     )
     # Создать субпарсер для отображения всех студентов.
     _ = subparsers.add_parser(
-        "display",
-        parents=[file_parser],
-        help="Display all students"
+        "display", parents=[file_parser], help="Display all students"
     )
 
     # Создать субпарсер для нахождения студентов с оценкой "2".
     _ = subparsers.add_parser(
-        "find",
-        parents=[file_parser],
-        help="Find the students"
+        "find", parents=[file_parser], help="Find the students"
     )
 
     # Выполнить разбор аргументов командной строки.
@@ -221,10 +199,7 @@ def main(command_line=None):
     # Добавить студента.
     if args.command == "add":
         students = add_student(
-            students,
-            args.name,
-            args.group,
-            args.performance
+            students, args.name, args.group, args.performance
         )
         is_dirty = True
 
@@ -241,5 +216,5 @@ def main(command_line=None):
         save(filepath, students)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
